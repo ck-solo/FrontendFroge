@@ -62,8 +62,8 @@ export default function TerminalPane({ sandboxId }) {
     fitAddonRef.current = fitAddon;
 
     // Connect socket.io
-    const agentHost = `${sandboxId}.agent.lvh.me`;
-    const socket = io(`http://${agentHost}`, {
+    const socket = io('/', {
+      path: `/agent/${sandboxId}/socket.io`,
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,

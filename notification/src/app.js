@@ -20,7 +20,15 @@ app.get("/_status/readyz", (req, res) => {
 
 
 async function startConsumer() {
-  const channel = await connectRabbitMQ();
+  let channel;
+  while (!channel) {
+    try {
+      channel = await connectRabbitMQ();
+    } catch (error) {
+      console.error("RabbitMQ connection failed, retrying in 5s...", error.message);
+      await new Promise(res => setTimeout(res, 5000));
+    }
+  }
 
   channel.consume(QUEUE, async (msg) => {
     if (!msg) return;
@@ -47,7 +55,6 @@ async function startConsumer() {
 
 startConsumer().catch((error) => {
   console.error("RabbitMQ consumer failed:", error);
-  process.exit(1);
 });
 
 

@@ -30,13 +30,24 @@ router.post('/project', authMiddleware, async (req, res) => {
 
 router.post("/start", authMiddleware, async (req, res) => {
 
-    const projectId = req.body.projectId;
+    let projectId = req.body.projectId;
+    let project;
 
-    // Verify that the project belongs to the authenticated user
-    const project = await Project.findOne({ _id: projectId, user: req.user.id });
+    if (projectId) {
+        // Verify that the project belongs to the authenticated user
+        project = await Project.findOne({ _id: projectId, user: req.user.id });
 
-    if (!project) {
-        return res.status(404).json({ message: 'Project not found or access denied' });
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found or access denied' });
+        }
+    } else {
+        // Automatically create a new project if not provided
+        project = new Project({
+            user: req.user.id,
+            title: "Untitled Sandbox"
+        });
+        await project.save();
+        projectId = project._id.toString();
     }
 
     const sandboxId = uuid();
@@ -50,7 +61,8 @@ router.post("/start", authMiddleware, async (req, res) => {
     return res.status(201).json({
         message: 'Sandbox environment created successfully',
         sandboxId,
-        previewUrl: `http://${sandboxId}.preview.localhost`
+        projectId,
+        previewUrl: `http://${sandboxId}.preview.lvh.me`
     })
 })
 
