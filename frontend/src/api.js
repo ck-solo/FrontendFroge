@@ -111,3 +111,54 @@ export async function invokeAI(projectId, message, onChunk, onDone) {
 
   onDone && onDone();
 }
+
+/**
+ * Log in a user
+ * POST /api/auth/login
+ */
+export async function loginUser(email, password) {
+  const res = await fetch(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+    credentials: 'include',
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || `Login failed: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+/**
+ * Register a new user
+ * POST /api/auth/register
+ */
+export async function registerUser(name, email, password) {
+  const res = await fetch(`${BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password }),
+    credentials: 'include',
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || `Registration failed: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+/**
+ * Get the currently logged-in user profile
+ * GET /api/auth/me
+ */
+export async function getCurrentUser() {
+  const res = await fetch(`${BASE_URL}/auth/me`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+  if (!res.ok) {
+    throw new Error(`Profile check failed: ${res.statusText}`);
+  }
+  return res.json();
+}

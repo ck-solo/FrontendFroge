@@ -10,7 +10,9 @@ import PreviewPane from './components/PreviewPane.jsx';
 import TerminalPane from './components/TerminalPane.jsx';
 import FileExplorer from './components/FileExplorer.jsx';
 import CodeViewer from './components/CodeViewer.jsx';
-import { startSandbox } from './api.js';
+import { startSandbox, getCurrentUser } from './api.js';
+import Login from './components/Login.jsx';
+import Register from './components/Register.jsx';
 
 // ──── Resizable Splitter ────────────────────────────────────────────────────
 function HorizontalResizer({ onResize }) {
@@ -218,6 +220,27 @@ export default function App() {
   const [sandboxStatus, setSandboxStatus] = useState('idle'); // idle | starting | running | error
   const [errorMsg, setErrorMsg] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [currentView, setCurrentView] = useState('register'); // 'register' | 'login'
+  const [user, setUser] = useState(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const data = await getCurrentUser();
+        if (data && data.user) {
+          setUser(data.user);
+        } else if (data && data.email) {
+          setUser({ email: data.email });
+        }
+      } catch (err) {
+        // Silent catch: user remains unauthenticated (null)
+      } finally {
+        setCheckingAuth(false);
+      }
+    }
+    checkAuth();
+  }, []);
 
   // Panel sizes (percentage-based for left panels, px for bottom)
   const [leftWidth, setLeftWidth] = useState(220); // sidebar icon strip
@@ -299,10 +322,55 @@ export default function App() {
   const sandboxId = sandbox?.sandboxId;
   const previewUrl = sandbox?.previewUrl;
 
-  // ── Landing ────────────────────────────────────────────────────────────────
+  // ── Auth Loading Screen ────────────────────────────────────────────────────
+  if (checkingAuth) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-[#0a0b0f] gap-4">
+        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
+        <span className="text-slate-400 text-sm font-medium text-slate-500">Verifying Session...</span>
+      </div>
+    );
+  }
+
+  // ── Authentication Gate ────────────────────────────────────────────────────
+  if (!user) {
+    return (
+      <div className="flex flex-col h-screen bg-[#0a0b0f] overflow-y-auto">
+        {/* Simplified Auth Top Nav */}
+        <header className="flex items-center gap-3 px-6 py-3 border-b border-[#1e2130] flex-shrink-0 glass">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+            <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
+          </div>
+          <span className="font-bold text-white text-lg">Kodr</span>
+          <span className="text-slate-600">|</span>
+          <span className="text-slate-500 text-sm">AI Sandbox IDE</span>
+        </header>
+
+        {currentView === 'login' ? (
+          <Login
+            onToggleRegister={() => setCurrentView('register')}
+            onBackHome={null}
+            onSuccess={(data) => {
+              setUser(data?.user || (data?.email ? { email: data.email } : { email: 'Authenticated User' }));
+            }}
+          />
+        ) : (
+          <Register
+            onToggleLogin={() => setCurrentView('login')}
+            onBackHome={null}
+            onSuccess={(data) => {
+              setUser(data?.user || (data?.email ? { email: data.email, name: data.name } : { email: 'Authenticated User' }));
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── Landing View ───────────────────────────────────────────────────────────
   if (sandboxStatus === 'idle' || sandboxStatus === 'starting' || sandboxStatus === 'error') {
     return (
-      <div className="flex flex-col h-screen bg-[#0a0b0f]">
+      <div className="flex flex-col h-screen bg-[#0a0b0f] overflow-y-auto">
         {/* Top nav */}
         <header className="flex items-center gap-3 px-6 py-3 border-b border-[#1e2130] flex-shrink-0 glass">
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
@@ -311,6 +379,24 @@ export default function App() {
           <span className="font-bold text-white text-lg">Kodr</span>
           <span className="text-slate-600">|</span>
           <span className="text-slate-500 text-sm">AI Sandbox IDE</span>
+          
+          <div className="flex-1" />
+          
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-400">
+              Logged in as <strong className="text-white">{user.name || user.email}</strong>
+            </span>
+            <button
+              id="nav-logout-btn"
+              onClick={() => {
+                setUser(null);
+                setCurrentView('register');
+              }}
+              className="px-4 py-1.5 text-sm font-semibold rounded-xl border border-[#1e2130] hover:border-red-500/30 text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
+            >
+              Sign Out
+            </button>
+          </div>
         </header>
 
         {/* Error banner */}
@@ -388,10 +474,23 @@ export default function App() {
         <button
           id="stop-sandbox-btn"
           onClick={handleStopSandbox}
-          className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-xs font-medium transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-xs font-medium transition-colors mr-2"
         >
           <Square className="w-3 h-3 fill-red-400" />
           Stop
+        </button>
+
+        {/* Sign Out button inside IDE */}
+        <button
+          id="nav-logout-btn-ide"
+          onClick={() => {
+            handleStopSandbox();
+            setUser(null);
+            setCurrentView('register');
+          }}
+          className="px-3 py-1.5 text-xs font-semibold rounded-xl border border-[#1e2130] hover:border-red-500/30 text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
+        >
+          Sign Out
         </button>
       </header>
 

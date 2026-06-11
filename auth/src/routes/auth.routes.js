@@ -50,8 +50,23 @@ authRouter.get("/google/callback",passport.authenticate("google",{
     }
 })
 
+authRouter.get("/me", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
 
-
+    return res.status(200).json({ status: "success", user });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+});
 
 export default authRouter
