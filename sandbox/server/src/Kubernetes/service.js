@@ -38,12 +38,22 @@ export async function createService(sandboxId){
 }
 
 
- export async function deleteService(sandboxId){
+ export const deleteService = async (serviceName) => {
+  try {
     const response = await k8sCoreV1Api.deleteNamespacedService({
-        namespace: 'default',
-        name: `sandbox-service-${sandboxId}`
-    })
+      name: serviceName,
+      namespace: "default",
+    });
 
-    return response
+    console.log(`Service deleted: ${serviceName}`);
+    return response;
+  } catch (error) {
+    if (error.code === 404) {
+      console.log(`Service already deleted/not found: ${serviceName}`);
+      return null;
+    }
 
- }
+    console.error(`Failed to delete service ${serviceName}:`, error);
+    throw error;
+  }
+};

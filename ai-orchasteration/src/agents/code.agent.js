@@ -2,12 +2,19 @@ import "dotenv/config";
 import { ChatMistralAI } from "@langchain/mistralai"
 import { listFiles, readFiles, updateFiles } from "./tool.js";
 import { createAgent } from "langchain";
+ 
+
+const apiKey = process.env.MISTRAL_API_KEY;
+
+if (!apiKey) {
+  throw new Error("MISTRAL_API_KEY is missing");
+}
 
 const model = new ChatMistralAI({
-    model: "mistral-medium-latest",
-    apiKey: process.env.MISTRAL_API_KEY,
-    "temperature": 0.7,
-})
+  model: "mistral-large-latest",
+  apiKey,
+  temperature: 0.7,
+});
 
 const agent = (createAgent({
     model,
