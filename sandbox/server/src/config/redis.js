@@ -10,8 +10,8 @@ export async function createSandboxKey(sandboxId) {
     `sandbox:${sandboxId}`,
     JSON.stringify({ status: "active" }),
     "EX",
-    120,
-  ); //120 mins
+    60 * 20
+  ); //20 mins
 }
 
 subscriber.config("SET", "notify-keyspace-events", "Ex"); // redis fire event

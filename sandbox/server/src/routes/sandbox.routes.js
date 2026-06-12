@@ -66,7 +66,7 @@ router.post("/start", authMiddleware, async (req, res) => {
     })
 })
 
-router.get("/project", authMiddleware, async (req, res) => {
+router.get("/projects", authMiddleware, async (req, res) => {
     const projects = await Project.find({ user: req.user.id });
 
     return res.status(200).json({
