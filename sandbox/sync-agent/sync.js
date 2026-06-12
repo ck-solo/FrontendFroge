@@ -13,7 +13,7 @@ const s3Client = new S3Client({
 });
 
 const projectId = process.env.PROJECT_ID;
-const bucketName = "lovable-code-bucket";
+const bucketName = process.env.AWS_S3_BUCKET;
 const localDirectory = '/workspace';
 
 async function checkS3ForFiles() {

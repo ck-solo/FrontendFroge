@@ -108,6 +108,15 @@ import { k8sCoreV1Api } from "./config.js";
                                 key: "AWS_REGION"
                             }
                         }
+                    },
+                    {
+                        name: "AWS_S3_BUCKET",
+                        valueFrom:{
+                            secretKeyRef: {
+                                name: "aws",
+                                key: "AWS_S3_BUCKET"
+                            }
+                        }
                     }
                 ]
                     
