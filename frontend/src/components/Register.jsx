@@ -80,7 +80,7 @@ export default function Register({ onToggleLogin, onBackHome, onSuccess }) {
         {/* Header */}
         <div className="text-center mt-6 mb-8">
           <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-          <p className="text-slate-400 text-sm">Join Kodr today and start building instantly</p>
+          <p className="text-slate-400 text-sm">Join Vibecoder today and start building instantly</p>
         </div>
 
         {/* Success Alert */}

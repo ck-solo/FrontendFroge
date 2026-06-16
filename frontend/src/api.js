@@ -1,4 +1,4 @@
-// API service layer for Kodr Sandbox
+// API service layer for Vibecoder Sandbox
 
 const BASE_URL = '/api';
 

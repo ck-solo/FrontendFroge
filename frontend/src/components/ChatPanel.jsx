@@ -30,7 +30,7 @@ function MessageBubble({ msg }) {
       {/* Bubble */}
       <div className={`max-w-[80%] ${isUser ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
         <span className="text-xs text-slate-500 px-1">
-          {isUser ? 'You' : isError ? 'Error' : 'Kodr AI'}
+          {isUser ? 'You' : isError ? 'Error' : 'Vibecoder AI'}
         </span>
         <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words ${
           isUser
@@ -58,7 +58,7 @@ function StreamingBubble({ text }) {
         <Sparkles className="w-4 h-4 text-white animate-pulse" />
       </div>
       <div className="max-w-[80%] flex flex-col gap-1 items-start">
-        <span className="text-xs text-slate-500 px-1">Kodr AI</span>
+        <span className="text-xs text-slate-500 px-1">Vibecoder AI</span>
         <div className="rounded-2xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed bg-[#1a1d27] border border-indigo-500/30 text-slate-200 whitespace-pre-wrap break-words">
           {text || <span className="flex gap-1 items-center text-slate-400">
             <Loader2 className="w-3 h-3 animate-spin" />
@@ -74,7 +74,7 @@ export default function ChatPanel({ sandboxId }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: '👋 Hi! I\'m Kodr AI. Tell me what you want to build and I\'ll generate the frontend code for your sandbox.\n\nTry: *"Create a todo app with dark mode"* or *"Build a landing page for a SaaS product"*',
+      content: '👋 Hi! I\'m Vibecoder AI. Tell me what you want to build and I\'ll generate the frontend code for your sandbox.\n\nTry: *"Create a todo app with dark mode"* or *"Build a landing page for a SaaS product"*',
       timestamp: Date.now(),
     }
   ]);
@@ -162,7 +162,7 @@ export default function ChatPanel({ sandboxId }) {
           <Bot className="w-4 h-4 text-white" />
         </div>
         <div>
-          <div className="text-sm font-semibold text-white">Kodr AI</div>
+          <div className="text-sm font-semibold text-white">Vibecoder AI</div>
           <div className="text-xs text-slate-500">AI Code Generator</div>
         </div>
         <div className="ml-auto flex items-center gap-1.5">

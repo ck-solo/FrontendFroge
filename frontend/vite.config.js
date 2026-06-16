@@ -24,6 +24,9 @@ export default defineConfig({
         secure: false,
         ws: true,
         configure: (proxy) => {
+          proxy.on("error", (err, req, res) => {
+            // Suppress proxy errors like ECONNABORTED
+          });
           proxy.on("proxyReq", (proxyReq, req) => {
             // Extract sandboxId from path: /agent/<sandboxId>/...
             const match = req.url.match(/^\/agent\/([^/]+)(\/.*)?$/);
@@ -43,12 +46,9 @@ export default defineConfig({
           });
         },
         router: (req) => {
-          console.log("Incoming URL:", req.url);
-
           const match = req.url.match(/^\/agent\/([^/]+)/);
 
           if (match) {
-            console.log("Routing to:", `http://${match[1]}.agent.lvh.me`);
             return `http://${match[1]}.agent.lvh.me`;
           }
 

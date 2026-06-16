@@ -75,7 +75,7 @@ export default function Login({ onToggleRegister, onBackHome, onSuccess }) {
         {/* Header */}
         <div className="text-center mt-6 mb-8">
           <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-          <p className="text-slate-400 text-sm">Sign in to your Kodr account to continue</p>
+          <p className="text-slate-400 text-sm">Sign in to your Vibecoder account to continue</p>
         </div>
 
         {/* Success Alert */}

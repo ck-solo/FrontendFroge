@@ -76,11 +76,11 @@ export default function TerminalPane({ sandboxId }) {
     });
 
     socket.on('disconnect', () => {
-      term.writeln('\r\n\x1b[1;33m⚠ Terminal disconnected\x1b[0m\r\n');
+      // Intentionally empty to only show connected message
     });
 
     socket.on('connect_error', (err) => {
-      term.writeln(`\r\n\x1b[1;31m✗ Connection error: ${err.message}\x1b[0m\r\n`);
+      // Intentionally empty to only show connected message
     });
 
     // Receive terminal output from server

@@ -127,7 +127,7 @@ function LandingScreen({ onStart, starting }) {
           <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 blur-xl opacity-30 -z-10" />
         </div>
         <div className="text-center">
-          <h1 className="text-5xl font-bold shimmer-text mb-2">Kodr</h1>
+          <h1 className="text-5xl font-bold shimmer-text mb-2">Vibecoder</h1>
           <p className="text-slate-400 text-lg">AI-Powered Sandbox IDE</p>
         </div>
       </div>
@@ -341,7 +341,7 @@ export default function App() {
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
           </div>
-          <span className="font-bold text-white text-lg">Kodr</span>
+          <span className="font-bold text-white text-lg">Vibecoder</span>
           <span className="text-slate-600">|</span>
           <span className="text-slate-500 text-sm">AI Sandbox IDE</span>
         </header>
@@ -376,7 +376,7 @@ export default function App() {
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
           </div>
-          <span className="font-bold text-white text-lg">Kodr</span>
+          <span className="font-bold text-white text-lg">Vibecoder</span>
           <span className="text-slate-600">|</span>
           <span className="text-slate-500 text-sm">AI Sandbox IDE</span>
           
@@ -425,7 +425,7 @@ export default function App() {
           <div className="w-6 h-6 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <Zap className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
           </div>
-          <span className="font-bold text-white">Kodr</span>
+          <span className="font-bold text-white">Vibecoder</span>
         </div>
 
         <div className="h-4 w-px bg-[#1e2130]" />
@@ -624,7 +624,7 @@ export default function App() {
         <div className="h-3 w-px bg-[#1e2130]" />
         <span className="font-mono">{sandboxId}</span>
         <div className="flex-1" />
-        <span>Kodr IDE v1.0</span>
+        <span>Vibecoder IDE v1.0</span>
       </footer>
     </div>
   );

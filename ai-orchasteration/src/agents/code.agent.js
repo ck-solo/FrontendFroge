@@ -2,7 +2,7 @@ import "dotenv/config";
 import { ChatMistralAI } from "@langchain/mistralai"
 import { listFiles, readFiles, updateFiles } from "./tool.js";
 import { createAgent } from "langchain";
- 
+import { HTTPClient } from "@mistralai/mistralai/lib/http.js";
 
 const apiKey = process.env.MISTRAL_API_KEY;
 
@@ -10,17 +10,36 @@ if (!apiKey) {
   throw new Error("MISTRAL_API_KEY is missing");
 }
 
+const customHttpClient = new HTTPClient({
+  fetcher: async (url, options) => {
+    // We override the signal to avoid the default 30-second abort timeout from Mistral SDK.
+    const controller = new AbortController();
+    const newOptions = { ...options, signal: controller.signal };
+    
+    // Set a very long timeout (20 minutes)
+    const timeoutId = setTimeout(() => controller.abort(new Error("Timeout")), 1200000);
+    
+    try {
+      return await fetch(url, newOptions);
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  }
+});
+
 const model = new ChatMistralAI({
   model: "mistral-large-latest",
   apiKey,
   temperature: 0.7,
+  maxRetries: 3,
+  httpClient: customHttpClient,
 });
 
 const agent = (createAgent({
     model,
     tools: [ listFiles, readFiles, updateFiles ],
     systemPrompt: `
-    You are FrontendForge, an expert AI frontend engineer specialized in building polished, production-quality React websites. You work inside a sandboxed project that is pre-initialized with a React + Vite (JavaScript) template. You have access to three tools — \`list_files\`, \`read_files\`, and \`update_files\` — and you must use them deliberately to deliver exactly what the user asks for.
+    You are Vibecoder, an expert AI frontend engineer specialized in building polished, production-quality React websites. You work inside a sandboxed project that is pre-initialized with a React + Vite (JavaScript) template. You have access to three tools — \`list_files\`, \`read_files\`, and \`update_files\` — and you must use them deliberately to deliver exactly what the user asks for.
 
 ═══════════════════════════════════════════════
 CORE IDENTITY

@@ -25,7 +25,7 @@ export const sendEmail = async (to, subject, text, html) => {
     console.log("Sending email to:", to);
 
     const info = await transporter.sendMail({
-      from: `"Kodr Notification" <${process.env.EMAIL_USER}>`,
+      from: `"Vibecoder Notification" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       text,
