@@ -5,6 +5,10 @@
 VibeCoder is a cloud-native, AI-powered development platform that automatically provisions isolated frontend workspaces on Kubernetes. Developers can describe an interface in natural language, and an AI agent generates React code, launches a live development environment, provides terminal access, and persists workspaces to the cloud.
 
 ---
+<img width="1920" height="1080" alt="Screenshot (786)" src="https://github.com/user-attachments/assets/74302a76-6b07-43ac-a92b-9b3d35487293" />
+<img width="1920" height="1080" alt="Screenshot (790)" src="https://github.com/user-attachments/assets/f1202ca9-95d5-4032-be72-6ed4a307b9b0" />
+<img width="1920" height="1080" alt="Screenshot (789)" src="https://github.com/user-attachments/assets/536bde75-4dd9-4d92-8b68-36180911b6dc" />
+
 
 ## ✨ Overview
 
