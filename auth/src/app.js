@@ -20,7 +20,6 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
     
 },(accessToken, refreshToken, profile, done)=>{
-    
     return done(null,profile)
 }))
 
@@ -31,9 +30,7 @@ app.get("/status/healthz",(req,res)=>{
 app.get("/status/readyz",(req,res)=>{
     res.status(200).json({ status: 'ok'})
 })
- 
 app.use('/api/auth', authRouter)
-
 
 
 export default app
