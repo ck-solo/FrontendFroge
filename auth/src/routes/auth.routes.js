@@ -3,15 +3,12 @@ import passport from "passport";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken"
 import { sendAuthNotification } from "../config/mq.js";
-
 const authRouter = Router()
-
 authRouter.get("/google",passport.authenticate("google",{
     scope: ["profile","email"],
     session: false,
     prompt: "select_account",
 }))
-
 authRouter.get("/google/callback",passport.authenticate("google",{
     failureRedirect: "/api/auth/google",
       session: false,
@@ -29,7 +26,6 @@ authRouter.get("/google/callback",passport.authenticate("google",{
         })
         await user.save()
        }
-       
        await sendAuthNotification({
         userId: user._id,
         action: 'google_login',
